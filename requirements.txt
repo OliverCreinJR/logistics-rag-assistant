@@ -1,5 +1,5 @@
 # --- Core RAG ---
-chromadb>=0.6.0
+chromadb>=1.0.0
 sentence-transformers>=3.0.0
 langchain-text-splitters>=0.2.0
 
