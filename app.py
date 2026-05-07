@@ -5,7 +5,7 @@
 
 Деплой:
     push в GitHub → Streamlit Cloud (https://share.streamlit.io) → New app.
-    В настройках app.py добавьте секрет GIGACHAT_CREDENTIALS.
+    В настройках app.py добавьте секрет GROQ_API_KEY.
 """
 from __future__ import annotations
 
@@ -69,7 +69,7 @@ st.set_page_config(
 
 st.title("📦 Ассистент по логистическим процедурам")
 st.caption(
-    "RAG-система: семантический поиск по корпоративным регламентам + генерация ответа GigaChat. "
+    "RAG-система: семантический поиск по корпоративным регламентам + генерация ответа Llama 3.3 70B через Groq. "
     "Учебный pet-проект."
 )
 

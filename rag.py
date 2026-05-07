@@ -1,4 +1,4 @@
-"""RAG-конвейер: retrieval + генерация ответа через GigaChat.
+"""RAG-конвейер: retrieval + генерация ответа через Groq (Llama 3.3 70B).
 
 Использование:
     from rag import answer
