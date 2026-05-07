@@ -1,0 +1,18 @@
+# --- Core RAG ---
+chromadb>=0.6.0
+sentence-transformers>=3.0.0
+langchain-text-splitters>=0.2.0
+
+# --- LLM provider ---
+gigachat>=0.1.30
+
+# --- UI ---
+streamlit>=1.36.0
+
+# --- Utils ---
+python-dotenv>=1.0.0
+
+# --- Streamlit Cloud sqlite fix ---
+# ChromaDB requires sqlite >= 3.35; Streamlit Cloud ships an older one.
+# pysqlite3-binary is swapped in at runtime (see top of rag.py).
+pysqlite3-binary>=0.5.0; sys_platform == "linux"

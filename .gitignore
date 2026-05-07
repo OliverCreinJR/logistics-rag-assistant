@@ -1,0 +1,35 @@
+# Секреты
+.env
+*.env
+
+# Python
+__pycache__/
+*.py[cod]
+*.so
+.Python
+venv/
+.venv/
+env/
+*.egg-info/
+.pytest_cache/
+
+# Локальная векторная БД (пересобирается из docs/ через python ingest.py)
+chroma_db/
+
+# Кэш HuggingFace
+.cache/
+.huggingface/
+
+# Streamlit
+.streamlit/secrets.toml
+
+# IDE
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# Артефакты разработки
+*.log
+eval_results.md
+streamlit_*.txt

@@ -1,0 +1,62 @@
+[
+  {
+    "question": "Что делать, если при приёмке обнаружено повреждение упаковки?",
+    "expected_doc": "01_act_o_povrezhdenii"
+  },
+  {
+    "question": "Кто обязательно должен участвовать в составлении акта о повреждении груза?",
+    "expected_doc": "01_act_o_povrezhdenii"
+  },
+  {
+    "question": "Что считается скрытой недостачей и в какой срок её можно зафиксировать?",
+    "expected_doc": "02_act_o_nedostache"
+  },
+  {
+    "question": "Сколько человек должно быть в комиссии по приёмке?",
+    "expected_doc": "02_act_o_nedostache"
+  },
+  {
+    "question": "Что делать, если артикул не проходит в WMS при приёмке?",
+    "expected_doc": "03_priemka_v_wms"
+  },
+  {
+    "question": "В какие сроки приёмная операция должна быть закрыта в WMS?",
+    "expected_doc": "03_priemka_v_wms"
+  },
+  {
+    "question": "В какой срок нужно подать претензию перевозчику?",
+    "expected_doc": "04_pretenziya_perevozchiku"
+  },
+  {
+    "question": "Какие документы прилагаются к претензии перевозчику?",
+    "expected_doc": "04_pretenziya_perevozchiku"
+  },
+  {
+    "question": "Как оформить возврат товара поставщику?",
+    "expected_doc": "05_vozvrat_postavshiku"
+  },
+  {
+    "question": "Можно ли вернуть поставщику товар с истёкшим сроком годности?",
+    "expected_doc": "05_vozvrat_postavshiku"
+  },
+  {
+    "question": "Какие реквизиты обязательны в форме ТОРГ-2?",
+    "expected_doc": "06_torg2"
+  },
+  {
+    "question": "Куда направляется акт ТОРГ-2 после составления?",
+    "expected_doc": "06_torg2"
+  },
+  {
+    "question": "Какие документы нужны перевозчику для въезда на территорию склада?",
+    "expected_doc": "07_propusk_transporta"
+  },
+  {
+    "question": "За сколько часов нужно подать заявку на въезд транспорта?",
+    "expected_doc": "07_propusk_transporta"
+  },
+  {
+    "question": "Что делать, если у водителя нет доверенности при отгрузке?",
+    "expected_doc": "08_dokumenty_perevozchika"
+  }
+]
