@@ -27,9 +27,8 @@ CHUNK_OVERLAP = 100       # символов
 TOP_K = 3                  # сколько чанков подавать в LLM
 
 # ---------- LLM ----------
-# Модель GigaChat. Варианты: "GigaChat", "GigaChat-Pro", "GigaChat-Max".
-# Для бесплатного тарифа используется "GigaChat".
-GIGACHAT_MODEL = "GigaChat"
+LLM_MODEL = "llama-3.3-70b-versatile"  # Llama 3.3 70B на Groq, хороший русский, free tier
+LLM_BASE_URL = "https://api.groq.com/openai/v1"
 LLM_TEMPERATURE = 0.1     # низкая температура — меньше галлюцинаций
 LLM_MAX_TOKENS = 1500
 

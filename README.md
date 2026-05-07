@@ -29,7 +29,7 @@ Pet-проект для портфолио. Является эволюцией 
                      │
                      ▼
             ┌──────────────────┐
-            │     GigaChat     │  temperature=0.1, защита от галлюцинаций
+            │  Groq (Llama 3.3 │  temperature=0.1, защита от галлюцинаций
             └────────┬─────────┘
                      │
                      ▼
@@ -40,7 +40,7 @@ Pet-проект для портфолио. Является эволюцией 
 - Эмбеддинги: `intfloat/multilingual-e5-small` (sentence-transformers, locally hosted)
 - Векторное хранилище: ChromaDB (persistent, локально)
 - Чанкование: `langchain-text-splitters` (RecursiveCharacterTextSplitter, 500 символов / 100 overlap)
-- Генерация: GigaChat API (Сбер)
+- Генерация: Groq API (Llama 3.3 70B Versatile)
 - UI: Streamlit
 - Деплой: Streamlit Community Cloud (free tier)
 
@@ -72,15 +72,15 @@ source .venv/bin/activate          # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-### 2. Ключ GigaChat
+### 2. Ключ Groq
 
-1. Зарегистрируйтесь на [developers.sber.ru](https://developers.sber.ru/portal/products/gigachat-api), создайте проект.
-2. Получите `Authorization Key` (base64-строка).
+1. Зарегистрируйтесь на [console.groq.com](https://console.groq.com/keys).
+2. Создайте API-ключ.
 3. Скопируйте `.env.example` в `.env` и впишите ключ:
 
 ```bash
 cp .env.example .env
-# отредактируйте .env: GIGACHAT_CREDENTIALS=<ваш_ключ>
+# отредактируйте .env: GROQ_API_KEY=<ваш_ключ>
 ```
 
 > Без ключа приложение работает в режиме «только retrieval» — показывает найденные фрагменты регламентов без сгенерированного ответа.
@@ -117,7 +117,7 @@ python eval.py
 4. В **Advanced settings → Secrets** добавьте:
 
 ```toml
-GIGACHAT_CREDENTIALS = "ваш_ключ"
+GROQ_API_KEY = "ваш_ключ"
 ```
 
 5. Deploy. При первом запуске приложение автоматически соберёт индекс из `docs/` (~1–2 минуты).
@@ -128,6 +128,9 @@ GIGACHAT_CREDENTIALS = "ваш_ключ"
 
 **Почему e5-small, а не e5-base?**
 Для базы из 8 документов разница в точности минимальна (1–3 п.п. на типичных Hit Rate @ 3), а размер модели в 4 раза меньше (118 МБ vs 478 МБ). Это критично для бесплатного тарифа Streamlit Cloud (1 ГБ RAM). При переезде на платный хостинг — поменять одну строку в `config.py`.
+
+**Почему Groq + Llama 3.3 70B?**
+Globally accessible API (работает без VPN в любой точке мира), бесплатный тариф с щедрыми лимитами, очень высокая скорость генерации (~500 токенов/сек). Модель Llama 3.3 70B уверенно работает с русским языком. Groq-совместим с OpenAI SDK — смена провайдера сводится к замене `base_url` и `api_key`.
 
 **Почему `temperature=0.1` и явный запрет галлюцинаций в системном промпте?**
 Юзкейс — корпоративные процедуры. Цена выдуманного срока подачи претензии или артикула — реальные деньги. Лучше сказать «не знаю» и перенаправить на старшего смены, чем уверенно ответить неправильно. Системный промпт явно требует ссылаться только на контекст.

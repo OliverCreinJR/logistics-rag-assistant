@@ -96,47 +96,38 @@ def _format_context(chunks: list[RetrievedChunk]) -> str:
     return "\n\n---\n\n".join(parts)
 
 
-def _generate_with_gigachat(question: str, context: str) -> str:
-    """Вызывает GigaChat API. Требует переменную окружения GIGACHAT_CREDENTIALS."""
-    from gigachat import GigaChat
-    from gigachat.models import Chat, Messages, MessagesRole
+def _generate_with_llm(question: str, context: str) -> str:
+    """Вызывает Groq API через openai-совместимый клиент. Требует GROQ_API_KEY."""
+    from openai import OpenAI
 
-    credentials = os.getenv("GIGACHAT_CREDENTIALS")
-    if not credentials:
+    api_key = os.getenv("GROQ_API_KEY")
+    if not api_key:
         raise RuntimeError(
-            "Переменная окружения GIGACHAT_CREDENTIALS не задана. "
-            "Получите ключ авторизации на https://developers.sber.ru/portal/products/gigachat-api "
-            "и добавьте его в .env"
+            "Переменная окружения GROQ_API_KEY не задана. "
+            "Получите ключ на https://console.groq.com/keys и добавьте его в .env"
         )
 
+    client = OpenAI(base_url=config.LLM_BASE_URL, api_key=api_key)
     user_prompt = config.USER_PROMPT_TEMPLATE.format(
         context=context,
         question=question,
     )
-
-    payload = Chat(
+    response = client.chat.completions.create(
+        model=config.LLM_MODEL,
         messages=[
-            Messages(role=MessagesRole.SYSTEM, content=config.SYSTEM_PROMPT),
-            Messages(role=MessagesRole.USER, content=user_prompt),
+            {"role": "system", "content": config.SYSTEM_PROMPT},
+            {"role": "user", "content": user_prompt},
         ],
         temperature=config.LLM_TEMPERATURE,
         max_tokens=config.LLM_MAX_TOKENS,
     )
-
-    with GigaChat(
-        credentials=credentials,
-        model=config.GIGACHAT_MODEL,
-        verify_ssl_certs=False,  # GigaChat использует свои корневые сертификаты
-        scope="GIGACHAT_API_PERS",  # для физлиц/разработчиков; для юрлиц — GIGACHAT_API_CORP
-    ) as giga:
-        response = giga.chat(payload)
-        return response.choices[0].message.content
+    return response.choices[0].message.content
 
 
 def _stub_answer(question: str, chunks: list[RetrievedChunk]) -> str:
     """Заглушка на случай отсутствия ключа API. Просто склеивает релевантные чанки."""
     header = (
-        "⚠️ LLM не подключена (не задан GIGACHAT_CREDENTIALS). "
+        "⚠️ LLM не подключена (не задан GROQ_API_KEY). "
         "Ниже — найденные релевантные фрагменты регламентов:\n\n"
     )
     body = "\n\n---\n\n".join(
@@ -151,12 +142,12 @@ def answer(question: str, k: int = config.TOP_K) -> RagResult:
     chunks = retrieve(question, k=k)
     context = _format_context(chunks)
 
-    used_llm = bool(os.getenv("GIGACHAT_CREDENTIALS"))
+    used_llm = bool(os.getenv("GROQ_API_KEY"))
     if used_llm:
         try:
-            answer_text = _generate_with_gigachat(question, context)
+            answer_text = _generate_with_llm(question, context)
         except Exception as e:
-            answer_text = f"❌ Ошибка вызова GigaChat: {e}\n\n" + _stub_answer(question, chunks)
+            answer_text = f"❌ Ошибка вызова Groq: {e}\n\n" + _stub_answer(question, chunks)
             used_llm = False
     else:
         answer_text = _stub_answer(question, chunks)

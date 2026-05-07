@@ -21,8 +21,8 @@ load_dotenv()
 # На Streamlit Cloud секреты приходят через st.secrets — пробрасываем их в env,
 # чтобы остальной код продолжал работать через os.getenv
 try:
-    if "GIGACHAT_CREDENTIALS" in st.secrets:
-        os.environ["GIGACHAT_CREDENTIALS"] = st.secrets["GIGACHAT_CREDENTIALS"]
+    if "GROQ_API_KEY" in st.secrets:
+        os.environ["GROQ_API_KEY"] = st.secrets["GROQ_API_KEY"]
 except (FileNotFoundError, Exception):
     # Локально файла secrets.toml нет — это нормально, ключ берётся из .env
     pass
@@ -62,14 +62,14 @@ from rag import answer  # noqa: E402
 # Боковая панель: статус и примеры
 with st.sidebar:
     st.subheader("Статус системы")
-    has_key = bool(os.getenv("GIGACHAT_CREDENTIALS"))
+    has_key = bool(os.getenv("GROQ_API_KEY"))
     if has_key:
-        st.success("✅ GigaChat подключён")
+        st.success("✅ Groq подключён")
     else:
         st.warning(
-            "⚠️ GIGACHAT_CREDENTIALS не задан.\n\n"
+            "⚠️ GROQ_API_KEY не задан.\n\n"
             "Без ключа система покажет найденные фрагменты регламентов, но не сгенерирует "
-            "связный ответ. Получите ключ на developers.sber.ru."
+            "связный ответ. Получите ключ на console.groq.com/keys."
         )
     st.divider()
     st.subheader("Примеры вопросов")
@@ -87,7 +87,7 @@ with st.sidebar:
     st.divider()
     st.caption(f"📂 Документов в базе: {len(list(config.DOCS_DIR.glob('*.md')))}")
     st.caption(f"🧠 Эмбеддер: `{config.EMBED_MODEL.split('/')[-1]}`")
-    st.caption(f"💬 LLM: `{config.GIGACHAT_MODEL}`")
+    st.caption(f"💬 LLM: `{config.LLM_MODEL}`")
 
 
 # Основное поле ввода
