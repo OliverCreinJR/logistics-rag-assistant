@@ -9,6 +9,14 @@
 """
 from __future__ import annotations
 
+# sqlite swap — должен быть до любого импорта chromadb (нужен на Streamlit Cloud)
+try:
+    __import__("pysqlite3")
+    import sys
+    sys.modules["sqlite3"] = sys.modules.pop("pysqlite3")
+except ImportError:
+    pass
+
 import os
 from pathlib import Path
 
@@ -34,7 +42,19 @@ import config
 # Если индекса ещё нет, собираем его на лету (актуально для Streamlit Cloud,
 # где chroma_db/ может не быть в репозитории).
 def ensure_index() -> None:
-    if not config.CHROMA_DIR.exists() or not any(config.CHROMA_DIR.iterdir()):
+    """Проверяет, что коллекция ChromaDB существует и непустая. Если нет — строит индекс."""
+    import chromadb
+    needs_build = False
+    try:
+        client = chromadb.PersistentClient(path=str(config.CHROMA_DIR))
+        collection = client.get_collection(config.COLLECTION_NAME)
+        if collection.count() == 0:
+            needs_build = True
+    except Exception:
+        # Коллекции нет, или ChromaDB не может её найти — строим с нуля
+        needs_build = True
+
+    if needs_build:
         with st.spinner("⚙️ Первый запуск: индексация регламентов (1–2 минуты)..."):
             from ingest import main as build_index
             build_index()
